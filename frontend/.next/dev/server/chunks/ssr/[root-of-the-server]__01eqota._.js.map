@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 13, "column": 0}, "map": {"version":3,"sources":["file:///home/srjdat/Projects/TasteFinder/frontend/app/favicon.ico.mjs%20%28structured%20image%20object%29"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 256, height: 256 }\n"],"names":["src","width","height"],"mappings":";;;;AAAA;;uCACe;IAAEA,KAAAA,mIAAG;IAAEC,OAAO;IAAKC,QAAQ;AAAI"}},
-    {"offset": {"line": 28, "column": 0}, "map": {"version":3,"sources":["file:///home/srjdat/Projects/TasteFinder/frontend/app/page.tsx"],"sourcesContent":["import Image from \"next/image\";\n\nexport default function Home() {\n  return (\n    <div>\n      <textarea className=\"border border-black rounded-md focus:border-blue-500 focus:outline-none resize: none\" rows={1} cols={20}></textarea>\n    </div>\n  );\n}\n"],"names":["Home","className","rows","cols"],"mappings":";;;;;;AAEe,SAASA;IACtB,qBACE,8OAAC;kBACC,cAAA,8OAAC;YAASC,WAAU;YAAuFC,MAAM;YAAGC,MAAM;;;;;;;;;;;AAGhI"}}]
-}
