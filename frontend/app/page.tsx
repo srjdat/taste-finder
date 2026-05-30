@@ -4,7 +4,18 @@ import React, { useState } from "react";
 import TextareaAutosize from 'react-textarea-autosize';
 
 export default function Home() {
-  const [userInput, setUserInput] = useState("");
+  /*
+    userInput is what's in the text area
+    setUserInput is the function to update userInput
+    useState("") is the default value of userInput which is empty string
+  */
+  const [userInput, setUserInput] = useState(""); 
+  
+  /* 
+    messages is the array for all the userInputs
+    setMessages is the function to update messages
+    useState([]) is default value of messages which is empty array
+  */
   const [messages, setMessages] = useState<string[]>([]);
 
   // this is for when the user inputs something into the text box
@@ -13,7 +24,11 @@ export default function Home() {
     if (e.key == "Enter") {
       // add userInput to messages array
       // updates and sends this to the textarea for output
-      setMessages([...messages, userInput]);
+      setMessages([ // create new array
+        ...messages, // add all the existing elements in the array
+        userInput // add new element 
+      ]);
+      // ALWAYS PUSH LIKE THIS
 
       // makes sure enter doesn't create a new line in the textarea
       e.preventDefault();
