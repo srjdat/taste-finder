@@ -9,6 +9,7 @@ type Props = {
 export default function AnimatedTitle( { text }: Props ) {
   const [visibleCount, setVisibleCount] = useState(0);
 
+  // don't know how it works but it does
   useEffect(() => {
     const interval = setInterval(() => {
       setVisibleCount(prev => {
@@ -18,7 +19,7 @@ export default function AnimatedTitle( { text }: Props ) {
         }
         return prev + 1;
       });
-    }, 50);
+    }, 50); // change that number to make it faster or slower based on what i want later
 
     return () => clearInterval(interval);
   }, [text]);

@@ -1,4 +1,12 @@
 from ollama import chat
+from fastapi import FastAPI
+
+app = FastAPI();
+
+inside_messages = []
+outside_messages = []
+
+
 
 def main(): 
 
@@ -6,8 +14,6 @@ def main():
     #ollama.create(model='inside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to cook inside. Ask the user what their preferences are first.')
     #ollama.create(model='outside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to go out and eat. Ask the user what their preferences are first.')
 
-    inside_messages = []
-    outside_messages = []
     user_input = ""
     while user_input != "exit()":
         user_input = input("Enter the Number \n1.Inside \n2.Outside \n>> ")
