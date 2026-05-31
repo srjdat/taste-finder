@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 type Props = {
-    text: string; 
+  text: string; 
 }
 
 export default function AnimatedTitle( { text }: Props ) {
