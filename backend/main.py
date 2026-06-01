@@ -25,7 +25,6 @@ app.add_middleware(
 inside_messages = []
 outside_messages = []
 
-
 @app.get("/")
 def read_root(): 
     return {"Hello": "World"}
@@ -34,7 +33,7 @@ def read_root():
 def chat_endpoint(request: ChatRequest): 
     if request.mode == "inside": 
         # if the array is empty then add the first input manually
-        if not inside_messages:
+        if not inside_messages or request.message == "inside":
             inside_messages.append({'role': 'user', 'content': 'Give me some recommendations for what dishes I should make'})
         else: # if array isn't empty (not the first message) append the user input
             inside_messages.append({'role': 'user', 'content': request.message})
@@ -51,7 +50,7 @@ def chat_endpoint(request: ChatRequest):
         return {"reply": response.message.content}
     elif request.mode == "outside": 
         # if the array is empty then add the first input manually
-        if not outside_messages:
+        if not outside_messages or request.message == "outside":
             outside_messages.append({'role': 'user', 'content': 'Give me some recommendations for what dishes I should make'})
         else: # if array isn't empty (not the first message) append the user input
             outside_messages.append({'role': 'user', 'content': request.message})

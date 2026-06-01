@@ -19,7 +19,7 @@ export default function AnimatedTitle( { text }: Props ) {
         }
         return prev + 1;
       });
-    }, 50); // change that number to make it faster or slower based on what i want later
+    }, 55); // change that number to make it faster or slower based on what i want later
 
     return () => clearInterval(interval);
   }, [text]);
