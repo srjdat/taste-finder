@@ -1,2 +1,1 @@
-This is a project that my sister asked me to make. 
-Mainly for fun, but also because I want to do a web app again.
+Helps you figure out what to cook or where to go out and eat for the day. 
