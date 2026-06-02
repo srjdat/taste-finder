@@ -11,6 +11,7 @@ export default function AnimatedTitle( { text }: Props ) {
 
   // don't know how it works but it does
   useEffect(() => {
+    setVisibleCount(0);
     const interval = setInterval(() => {
       setVisibleCount(prev => {
         if (prev >= text.length) {
@@ -25,7 +26,7 @@ export default function AnimatedTitle( { text }: Props ) {
   }, [text]);
 
   return (
-    <label className="font-mono text-3xl text-center w-full block" htmlFor="input">
+    <label className="font-mono text-3xl text-center w-full h-9 block" htmlFor="input">
       {text.slice(0, visibleCount)}
     </label>
   );

@@ -18,6 +18,7 @@ export default function Home() {
   const bottomRef = useRef<HTMLDivElement>(null); 
   const [loading, setLoading] = useState(false);
   const [loadingDots, setLoadingDots] = useState("");
+  const [showDisplay, setShowDisplay] = useState(false);
 
   // to make the displayarea scroll down to recent most inputs and outputs
   useEffect(() => {
@@ -49,6 +50,8 @@ export default function Home() {
         {role: "user", text: userInput}, // add user input 
       ])
 
+      // show the displayarea
+      setShowDisplay(true);
       // set loading mode on
       setLoading(true);
       setLoadingDots(".");
@@ -140,6 +143,8 @@ export default function Home() {
       {role: "user", text: userInput}, // add user input 
     ])
 
+    // animate the displayarea
+    setShowDisplay(true);
     // set loading mode on
     setLoading(true);
     setLoadingDots(".");
@@ -221,8 +226,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-1 items-center justify-start min-h-screen pt-15 mx-auto">
-      {mode === "" && <AnimatedTitle text="Want to eat Inside or Outside?"/>}
-      {mode !== "" && <AnimatedTitle text="What shall we eat?"/>}
+      {mode === "" ? <AnimatedTitle text="Want to eat Inside or Outside?"/> : <AnimatedTitle text="What shall we eat?"/>}
 
       <div className="relative flex items-center rounded-xl border border-gray-300 shadow-lg w-[32vw] mt-2.5">
         <span className="absolute left-3 font-mono text-black-400">{">"}</span>
@@ -239,28 +243,25 @@ export default function Home() {
 
       <button
         onClick={handleSend}
-        className="ml-2 mr-2 p-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 transition-colors flex items-center justify-center"
+        className="cursor-pointer ml-2 mr-2 p-2 rounded-lg border bg-gray-900 text-white border-gray-700 hover:bg-gray-700 transition-colors flex items-center justify-center"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <line x1="12" y1="19" x2="12" y2="5" />
           <polyline points="5 12 12 5 19 12" />
         </svg>
       </button>
-
       </div>
 
-
-
       <div 
-        className="flex flex-col self-end rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg h-[75vh] w-[85vw] mt-5 overflow-y-auto"
+        className= {`flex flex-col self-end rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg h-[75vh] w-[85vw] mt-5 overflow-y-auto transition-opacity duration-700 ${showDisplay ? "opacity-100" : "opacity-0"}`}
         id="displayArea"
       >
         {messages.map((message) => (
           message.role === "user" 
-          ? <div className="display: inline-block flex justify-right rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg w-fit max-w-xl mt-2.5 mb-2.5 ml-auto mr-2.5" key={message.text}>{message.text}</div> 
-          : <div className="rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg max-w-[75vw] mt-2.5 mb-2.5 ml-2.5 mr-auto" key={message.text}><Markdown>{message.text}</Markdown></div>
+          ? <div className={`display: inline-block flex justify-right rounded-xl bg-gray-900 text-white border-gray-700 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg w-fit max-w-xl mt-2.5 mb-2.5 ml-auto mr-2.5 ${showDisplay ? "opacity-100" : "opacity-0"}`} key={message.text}>{message.text}</div> 
+          : <div className={`rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg max-w-[75vw] mt-2.5 mb-2.5 ml-2.5 mr-auto ${showDisplay ? "opacity-100" : "opacity-0"}`} key={message.text}><Markdown>{message.text}</Markdown></div>
         ))}
-        {loading && <div className="rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base inline-block font-mono shadow-lg w-15 mt-2.5 mb-2.5 ml-2.5 mr-auto">{loadingDots}</div>}
+        {loading && <div className={`rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base inline-block font-mono shadow-lg w-15 mt-2.5 mb-2.5 ml-2.5 mr-auto ${showDisplay ? "opacity-100" : "opacity-0"}`}>{loadingDots}</div>}
         <div ref={bottomRef}></div>
       </div>
     </div>
