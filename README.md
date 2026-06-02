@@ -1,1 +1,1 @@
-Helps you figure out what to cook or where to go out and eat for the day. 
+Helps you find what to eat for the day, night, or morning.
