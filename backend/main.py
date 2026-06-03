@@ -66,8 +66,16 @@ def chat_endpoint(request: ChatRequest):
         # return message from bot
         return {"reply": response.message.content}
 
+
+@app.post("/reset")
+def reset_chat():
+    # clear both arrays so we can use it again
+    inside_messages.clear()
+    outside_messages.clear()
+
+    # return a ok message
+    return {"status": "ok"} 
+
 #print(user_input)
-#ollama.create(model='inside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to cook inside. Ask the user what their preferences are first.')
-#ollama.create(model='outside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to go out and eat. Ask the user what their preferences are first.')
-
-
+ollama.create(model='inside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to cook inside. Ask the user what their preferences are first.')
+ollama.create(model='outside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to go out and eat. Ask the user what their preferences are first.')

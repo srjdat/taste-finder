@@ -5,6 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Markdown  from "react-markdown";
 import { ThemeProvider } from "next-themes";
 
+
 type Message = {
   role: "user" | "bot"; 
   text: string;
@@ -19,6 +20,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [loadingDots, setLoadingDots] = useState("");
   const [showDisplay, setShowDisplay] = useState(false);
+  // const [newChat, changeNewChat] = useState(false);
 
   // to make the displayarea scroll down to recent most inputs and outputs
   useEffect(() => {
@@ -133,6 +135,7 @@ export default function Home() {
     }
   };
 
+  // when send button is pressed
   const handleSend = async () => {
     // set the textArea back to an empty string
     setUserInput("");
@@ -215,17 +218,45 @@ export default function Home() {
       // turn loading animation off right before you display the items
       setLoading(false);
 
-
       // add the bot's reply to the messages array    
       setMessages(prev => [
         ...prev, 
         {role: "bot", text: data.reply}
-      ])
+      ]);
     }
-  }
+  };
+
+  const handleNewChat = async () => {
+    setUserInput("");
+    setMessages([]);
+    setMode("");
+    setLoading(false);
+    setLoadingDots("");
+    setShowDisplay(false);
+    // changeNewChat(false);
+    const response = await fetch("http://localhost:8000/reset", {
+      method:"POST"
+    });
+  };
+
+  // when new button is pressed
 
   return (
-    <div className="flex flex-col gap-1 items-center justify-start min-h-screen pt-15 mx-auto">
+  <div className="flex h-screen w-screen items-center justify-start">
+    <div className="flex flex-col items-start p-4">
+      <button 
+        onClick={handleNewChat}
+        className="cursor-pointer ml-2 mr-2 p-2 rounded-lg border bg-gray-900 text-white border-gray-700 hover:bg-gray-700 transition-colors flex items-center justify-center"
+      >
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-plus-icon lucide-plus">
+        <path d="M5 12h14"/>
+        <path d="M12 5v14"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div className="flex flex-col gap-1 items-center justify-start min-h-screen pt-10 mx-auto">
       {mode === "" ? <AnimatedTitle text="Want to eat Inside or Outside?"/> : <AnimatedTitle text="What shall we eat?"/>}
 
       <div className="relative flex items-center rounded-xl border border-gray-300 shadow-lg w-[32vw] mt-2.5">
@@ -258,12 +289,13 @@ export default function Home() {
       >
         {messages.map((message) => (
           message.role === "user" 
-          ? <div className={`display: inline-block flex justify-right rounded-xl bg-gray-900 text-white border-gray-700 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg w-fit max-w-xl mt-2.5 mb-2.5 ml-auto mr-2.5 ${showDisplay ? "opacity-100" : "opacity-0"}`} key={message.text}>{message.text}</div> 
-          : <div className={`rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg max-w-[75vw] mt-2.5 mb-2.5 ml-2.5 mr-auto ${showDisplay ? "opacity-100" : "opacity-0"}`} key={message.text}><Markdown>{message.text}</Markdown></div>
+          ? <div className={`display: inline-block flex justify-right rounded-xl bg-gray-900 text-white border-gray-700 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg w-fit max-w-xl mt-2.5 mb-2.5 ml-auto mr-2.5 transition-opacity duration-700 ${showDisplay ? "opacity-100" : "opacity-0"}`} key={message.text}>{message.text}</div> 
+          : <div className={`rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base font-mono shadow-lg max-w-[75vw] mt-2.5 mb-2.5 ml-2.5 mr-auto transition-opacity duration-700 ${showDisplay ? "opacity-100" : "opacity-0"}`} key={message.text}><Markdown>{message.text}</Markdown></div>
         ))}
-        {loading && <div className={`rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base inline-block font-mono shadow-lg w-15 mt-2.5 mb-2.5 ml-2.5 mr-auto ${showDisplay ? "opacity-100" : "opacity-0"}`}>{loadingDots}</div>}
+        {loading && <div className={`rounded-xl border border-gray-300 focus:border-gray-400 focus:outline-none resize-none p-3 text-base inline-block font-mono shadow-lg w-15 mt-2.5 mb-2.5 ml-2.5 mr-auto transition-opacity duration-700 ${showDisplay ? "opacity-100" : "opacity-0"}`}>{loadingDots}</div>}
         <div ref={bottomRef}></div>
       </div>
     </div>
+  </div>
   );
 }
