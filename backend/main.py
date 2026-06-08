@@ -1,17 +1,29 @@
 from ollama import chat
 from fastapi import FastAPI
+import ollama
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from outside import router as outside_router
+
+#print(user_input)
+# ollama.create(model='inside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to cook inside. Ask the user what their preferences are first.')
+# ollama.create(model='outside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to go out and eat. Ask the user what their preferences are first.')
 
 class ChatRequest(BaseModel): 
     message: str
     mode: str
+class Message(BaseModel): 
+    message: str
 
 app = FastAPI()
 
-# fix CORS issues I HATE WEB DEV
+# include outside_router
+app.include_router(outside_router)
+ 
+# where to accept inputs from
+# right now @xyve7 is hosting 
 origins = [
-    "http://localhost:3000"
+    #"http://localhost:3000"
 ]
 
 app.add_middleware(
@@ -76,6 +88,6 @@ def reset_chat():
     # return a ok message
     return {"status": "ok"} 
 
-#print(user_input)
-ollama.create(model='inside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to cook inside. Ask the user what their preferences are first.')
-ollama.create(model='outside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to go out and eat. Ask the user what their preferences are first.')
+@app.post("/format-recipe")
+def format_recipe(botMessage: Message): 
+    print("")
