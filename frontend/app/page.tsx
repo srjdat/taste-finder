@@ -27,11 +27,13 @@ export default function Home() {
   const [showIcon, setShowIcon] = useState(false);
   const [ingredientsMessage, setIngredientsMessage] = useState<any | null>("");
   const [ingredientsAvail, setIngredientsAvail] = useState(false);
+  const [savedState, setSavedState] = useState(false);
   // const [newChat, changeNewChat] = useState(false);
 
   // env variables
   const chat_request: string = process.env.NEXT_PUBLIC_CHAT_REQUEST!;
   const reset_request: string = process.env.NEXT_PUBLIC_RESET_REQUEST!;
+
 
   // to make the displayarea scroll down to recent most inputs and outputs
   useEffect(() => {
@@ -46,10 +48,42 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [loading]);
 
-    useEffect(() => {
-      ingredientsAvail ? localStorage.setItem("ingredientsMessage", ingredientsMessage) : localStorage.setItem("ingredientsMessage", "didnt work"); 
-    },[ingredientsMessage]);
+  // save messages, mode, showDisplay into localStorage
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('messages', JSON.stringify(messages));
+      localStorage.setItem('mode', mode);
+      localStorage.setItem('showDisplay', JSON.stringify(showDisplay));
+      localStorage.setItem('showIcon', JSON.stringify(showIcon));
+      localStorage.setItem('ingredientsMessage', ingredientsMessage ?? "");
+      localStorage.setItem('ingredientsAvail', JSON.stringify(ingredientsAvail));
+    }
+  }, [messages]);
 
+  // get localStorage for messages, mode, showDisplay
+  useEffect(() => {
+    let saved = localStorage.getItem('messages');
+    if (saved) { setMessages(JSON.parse(saved)); }
+    saved = localStorage.getItem('mode');
+    if (saved) { setMode(saved); }
+    saved = localStorage.getItem('showDisplay'); 
+    if (saved) { setShowDisplay(JSON.parse(saved)); }
+    saved = localStorage.getItem('showIcon'); 
+    if (saved) { setShowIcon(JSON.parse(saved)); }
+    saved = localStorage.getItem('ingredientsMessage');
+    if (saved) { setIngredientsMessage(saved); }
+    saved = localStorage.getItem('ingredientsAvail'); 
+    if (saved) { setIngredientsAvail(JSON.parse(saved)); }
+  }, []);
+
+  useEffect(() => {
+    console.log('messages from storage:', localStorage.getItem('messages'));
+    console.log('mode from storage:', localStorage.getItem('mode'));
+    console.log('showDisplay from storage:', localStorage.getItem('showDisplay'));
+    console.log('showIcon from storage:', localStorage.getItem('showIcon'));
+    console.log('ingredientsMessage from storage:', localStorage.getItem('ingredientsMessage'));
+    console.log('ingredientsAvail from storage:', localStorage.getItem('ingredientsAvail'));
+  })
 
   // when "enter" is pressed on the user input area
   const keyDown = async ( e: { key: string; preventDefault: () => void; }) => {
@@ -65,7 +99,7 @@ export default function Home() {
       setMessages([
         ...messages, 
         {role: "user", text: userInput}, // add user input 
-      ])
+      ]);
 
       // show the displayarea
       setShowDisplay(true);
@@ -260,6 +294,17 @@ export default function Home() {
     setLoading(false);
     setLoadingDots("");
     setShowDisplay(false);
+    setShowIcon(false);
+    setIngredientsMessage("");
+    setIngredientsAvail(false);
+
+    localStorage.removeItem('messages');
+    localStorage.removeItem('mode');    
+    localStorage.removeItem('showDisplay');
+    localStorage.removeItem('showIcon');
+    localStorage.removeItem('ingredientsMessage');
+    localStorage.removeItem('ingredientsAvail');
+
     // changeNewChat(false);
     const response = await fetch(reset_request, {
       method:"POST",
@@ -288,7 +333,7 @@ export default function Home() {
           id="ingredients"
         >
           <Link href={'inside/'} hidden={showIcon ? false : true}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-utensils-crossed-icon lucide-utensils-crossed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-utensils-crossed-icon lucide-utensils-crossed">
               <path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/>
               <path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/>
               <path d="m2.1 21.8 6.4-6.3"/>

@@ -4,6 +4,7 @@ import ollama
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from outside import router as outside_router
+import json
 
 #print(user_input)
 # ollama.create(model='inside_chatbot', from_='llama3.2', system='You are a personal assistant that helps with what to cook inside. Ask the user what their preferences are first.')
@@ -36,6 +37,7 @@ app.add_middleware(
 
 inside_messages = []
 outside_messages = []
+ingredients_list = []
 
 @app.get("/")
 def read_root(): 
@@ -90,4 +92,4 @@ def reset_chat():
 
 @app.post("/format-recipe")
 def format_recipe(botMessage: Message): 
-    print("")
+    json.dumps(ingredients_list)
